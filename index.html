@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Handjet:wght@200;300&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <title>Cronômetro</title>
+</head>
+<body>
+  <h1>Cronômetro</h1>
+  <img src="./assets/imgcron.png" alt="cron">
+  <div id="cronometro">00:00:00</div>
+  <button id="iniciar">Iniciar</button>
+  <button id="parar">Parar</button>
+  <button id="zerar">Zerar</button>
+
+  <script>
+    let cronometroElement = document.getElementById('cronometro');
+    let iniciarButton = document.getElementById('iniciar');
+    let pararButton = document.getElementById('parar');
+    let zerarButton = document.getElementById('zerar');
+    let intervalId;
+    let segundos = 0;
+    let minutos = 0;
+    let horas = 0;
+
+    function atualizarCronometro() {
+      segundos++;
+
+      if (segundos == 60) {
+        segundos = 0;
+        minutos++;
+      }
+
+      if (minutos == 60) {
+        minutos = 0;
+        horas++;
+      }
+
+      let segundosFormatados = segundos < 10 ? '0' + segundos : segundos;
+      let minutosFormatados = minutos < 10 ? '0' + minutos : minutos;
+      let horasFormatadas = horas < 10 ? '0' + horas : horas;
+
+      cronometroElement.textContent = `${horasFormatadas}:${minutosFormatados}:${segundosFormatados}`;
+    }
+
+    function iniciarCronometro() {
+      intervalId = setInterval(atualizarCronometro, 1000);
+      iniciarButton.disabled = true;
+      pararButton.disabled = false;
+      zerarButton.disabled = true;
+    }
+
+    function pararCronometro() {
+      clearInterval(intervalId);
+      iniciarButton.disabled = false;
+      pararButton.disabled = true;
+      zerarButton.disabled = false;
+    }
+
+    function zerarCronometro() {
+      clearInterval(intervalId);
+      cronometroElement.textContent = '00:00:00';
+      segundos = 0;
+      minutos = 0;
+      horas = 0;
+      iniciarButton.disabled = false;
+      pararButton.disabled = true;
+      zerarButton.disabled = true;
+    }
+
+    iniciarButton.addEventListener('click', iniciarCronometro);
+    pararButton.addEventListener('click', pararCronometro);
+    zerarButton.addEventListener('click', zerarCronometro);
+  </script>
+</body>
+</html>
